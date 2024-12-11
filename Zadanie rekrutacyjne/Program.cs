@@ -94,7 +94,7 @@ namespace OrderApp
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"\nNiepoprawny wybór. Wybierz numer od 1 do {order.Items.Count}.");
+                                    Console.WriteLine($"\nNiepoprawny wybór. Wybierz numer numer produktu do usunięcia lub '0', aby wrócić.");
                                 }
                             }
                             else
