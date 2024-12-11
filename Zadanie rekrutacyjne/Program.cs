@@ -67,7 +67,7 @@ namespace OrderApp
                     case "2":
                         while (true)
                         {
-                            Console.WriteLine("Produkty w zamówieniu:");
+                            Console.WriteLine("\nProdukty w zamówieniu:");
                             if (order.Items.Count == 0)
                             {
                                 Console.WriteLine("\nBrak produktów w zamówieniu. Powrót do głównego menu...");
@@ -106,7 +106,7 @@ namespace OrderApp
                     case "3":
                         if (order.Items.Count == 0) 
                         { 
-                            Console.WriteLine("Brak produktów w zamówieniu."); 
+                            Console.WriteLine("\nBrak produktów w zamówieniu."); 
                         }
                         else
                         {
@@ -117,7 +117,7 @@ namespace OrderApp
                         exit = true;
                         break;
                     default:
-                        Console.WriteLine("Niepoprawny wybór. Wybierz numer od 1 do 4.");
+                        Console.WriteLine("\nNiepoprawny wybór. Wybierz numer od 1 do 4.");
                         break;
                 }
             }
