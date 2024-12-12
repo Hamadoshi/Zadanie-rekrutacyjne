@@ -56,7 +56,12 @@
                         }
                         else
                         {
-                            Console.WriteLine($"\nCałkowita wartość zamówienia: {order.CalculateTotal()} PLN");
+                            Console.WriteLine("\nProdukty w zestawieniu:");
+                            for (int i = 0; i < order.Items.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {order.Items[i].Product.Name} - {order.Items[i].Product.Price} PLN");
+                            }
+                            Console.WriteLine($"Całkowita wartość zamówienia: {order.CalculateTotal()} PLN");
                         }
                         break;
                     case "4":
