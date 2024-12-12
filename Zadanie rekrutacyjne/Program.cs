@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace OrderApp
+﻿namespace OrderApp
 {
     class Program
     {
@@ -32,81 +28,31 @@ namespace OrderApp
                 switch (choice)
                 {
                     case "1":
-                        while(true)
-                        {
-                            Console.WriteLine("\nDostępne produkty:");
-                            for (int i = 0; i < products.Count; i++)
+                        Order.StayAtPage(
+                            "Dostępne produkty:",
+                            products.Select(p => $"{p.Name} - {p.Price} PLN").ToList(),
+                            productIndex =>
                             {
-                                Console.WriteLine($"{i + 1}. {products[i].Name} - {products[i].Price} PLN");
+                                order.AddItem(products[productIndex]);
+                                Console.WriteLine("\nProdukt dodany.");
                             }
-                            Console.WriteLine("0. Powrót do głównego menu");
-                            Console.Write("Wybierz produkt (numer): ");
-                            if (int.TryParse(Console.ReadLine(), out int productIndex))
-                            {
-                                if (productIndex == 0)
-                                {
-                                    Console.WriteLine("\nPowrót do głównego menu...");
-                                    break;
-                                }
-                                else if (productIndex > 0 && productIndex <= products.Count)
-                                {
-                                    order.AddItem(products[productIndex - 1]);
-                                    Console.WriteLine("\nProdukt dodany.");
-                                }
-                                else
-                                {
-                                    Console.WriteLine("\nNiepoprawny wybór. Wpisz numer produktu lub '0', aby wrócić.");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("\nNiepoprawny wybór. Wpisz numer produktu lub '0', aby wrócić.");
-                            }
-                        }
+                        );
                         break;
                     case "2":
-                        while (true)
-                        {
-                            Console.WriteLine("\nProdukty w zamówieniu:");
-                            if (order.Items.Count == 0)
+                        Order.StayAtPage(
+                            "Produkty w zamówieniu:",
+                            order.Items.Select(i => $"{i.Product.Name} - {i.Product.Price} PLN").ToList(),
+                            itemIndex =>
                             {
-                                Console.WriteLine("\nBrak produktów w zamówieniu. Powrót do głównego menu...");
-                                break; // Back to main menu if list is empty
+                                order.RemoveItem(itemIndex);
+                                Console.WriteLine("\nProdukt usunięty.");
                             }
-
-                            for (int i = 0; i < order.Items.Count; i++)
-                            {
-                                Console.WriteLine($"{i + 1}. {order.Items[i].Product.Name} - {order.Items[i].Product.Price} PLN");
-                            }
-                                Console.WriteLine("0. Powrót do głównego menu");
-                            Console.Write("Wybierz produkt do usunięcia (numer): ");
-                            if (int.TryParse(Console.ReadLine(), out int itemIndex))
-                            {
-                                if (itemIndex == 0)
-                                {
-                                    Console.WriteLine("\nPowrót do głównego menu...");
-                                    break; // Back to main menu
-                                }
-                                else if (itemIndex > 0 && itemIndex <= order.Items.Count)
-                                {
-                                    order.RemoveItem(itemIndex - 1);
-                                    Console.WriteLine("\nProdukt usunięty.");
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"\nNiepoprawny wybór. Wybierz numer numer produktu do usunięcia lub '0', aby wrócić.");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine($"\nNiepoprawny wybór. Wybierz numer numer produktu do usunięcia lub '0', aby wrócić.");
-                            }
-                        }
+                        );
                         break;
                     case "3":
-                        if (order.Items.Count == 0) 
-                        { 
-                            Console.WriteLine("\nBrak produktów w zamówieniu."); 
+                        if (order.Items.Count == 0)
+                        {
+                            Console.WriteLine("\nBrak produktów w zamówieniu.");
                         }
                         else
                         {
@@ -158,6 +104,51 @@ namespace OrderApp
         public void RemoveItem(int index)
         {
             Items.RemoveAt(index);
+        }
+
+        public static void StayAtPage(
+        string header,
+        List<string> options,
+        Action<int> handleOption)
+        {
+            while (true)
+            {
+                Console.WriteLine($"\n{header}");
+
+                if (options.Count == 0)
+                {
+                    Console.WriteLine("\nBrak dostępnych opcji.");
+                    break; // Wyjście, jeśli brak elementów
+                }
+
+                for (int i = 0; i < options.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {options[i]}");
+                }
+                Console.WriteLine($"0. Powrót do głównego menu");
+                Console.Write("Wybierz opcję (numer): ");
+
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    if (choice == 0)
+                    {
+                        Console.WriteLine($"\nPowrót do głównego menu...");
+                        break; // Wyjście z funkcji
+                    }
+                    else if (choice > 0 && choice <= options.Count)
+                    {
+                        handleOption(choice - 1); // Wywołanie akcji dla wybranej opcji
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNiepoprawny wybór. Wybierz właściwy numer lub '0', aby wrócić.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nNiepoprawny wybór. Wpisz numer opcji lub '0', aby wrócić.");
+                }
+            }
         }
 
         public decimal CalculateTotal()
